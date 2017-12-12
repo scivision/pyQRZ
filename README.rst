@@ -57,8 +57,6 @@ Example
 
 Notes
 -----
-However, it appears you can get basic information with a standard QRZ user account.
-
 I am thinking about providing a free (and opensourced) callsign lookup service, probably start off as USA only.
 If this is of interest to you, feel free to contact me.
 Knowing it would be useful would make it a higher priority.
