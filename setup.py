@@ -15,6 +15,7 @@ setup(
     long_description=open('README.rst', 'rt').read(),
     install_requires=install_requires,
     packages=find_packages(),
+    python_requires='>2.7',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
