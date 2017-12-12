@@ -1,10 +1,17 @@
 #!/usr/bin/env python
-# coding:utf-8
-
+"""
+Note: QRZ paid subscription is required, currently $29.95/year
+https://www.qrz.com/page/current_spec.html
+"""
+import six
 import os
 import requests
 import xmltodict
-from ConfigParser import SafeConfigParser
+from six.moves.configparser import ConfigParser,NoSectionError,NoOptionError
+from getpass import getpass
+#
+if six.PY2:
+    ConnectionError = OSError
 
 
 class QRZerror(Exception):
@@ -18,33 +25,41 @@ class CallsignNotFound(Exception):
 class QRZ(object):
     def __init__(self, cfg=None):
         if cfg:
-            self._cfg = SafeConfigParser()
+            self._cfg = ConfigParser()
             self._cfg.read(cfg)
         else:
             self._cfg = None
         self._session = None
         self._session_key = None
 
+
     def _get_session(self):
-        if self._cfg and self._cfg.has_section('qrz'):
+        try:
             username = self._cfg.get('qrz', 'username')
             password = self._cfg.get('qrz', 'password')
-        else:
+        except (NoSectionError,NoOptionError,AttributeError):
             username = os.environ.get('QRZ_USER')
             password = os.environ.get('QRZ_PASSWORD')
-        if not username or not password:
-            raise Exception("No Username/Password found")
 
-        url = '''https://xmldata.qrz.com/xml/current/?username={0}&password={1}'''.format(username, password)
+        if not username or not password:
+            raise ValueError('must enter username and password')
+
+        url = 'https://xmldata.qrz.com/xml/current/?username={}&password={}'.format(username, password)
+        url = 'https://xmldata.qrz.com/xml/current/'
         self._session = requests.Session()
-        self._session.verify = False
+#        self._session.verify = False
         r = self._session.get(url)
         if r.status_code == 200:
-            raw_session = xmltodict.parse(r.content)
-            self._session_key = raw_session['QRZDatabase']['Session']['Key']
-            if self._session_key:
-                return True
-        raise Exception("Could not get QRZ session")
+            raw = xmltodict.parse(r.content)
+            try:
+                self._session_key = raw['QRZDatabase']['Session']['Key']
+                if self._session_key:
+                    return True
+            except KeyError:
+                print(raw)
+
+        raise ConnectionError("Could not get QRZ session")
+
 
     def callsign(self, callsign, retry=True):
         if self._session_key is None:
@@ -52,7 +67,7 @@ class QRZ(object):
         url = """http://xmldata.qrz.com/xml/current/?s={0}&callsign={1}""".format(self._session_key, callsign)
         r = self._session.get(url)
         if r.status_code != 200:
-            raise Exception("Error Querying: Response code {}".format(r.status_code))
+            raise ConnectionError("Error Querying: Response code {}".format(r.status_code))
         raw = xmltodict.parse(r.content).get('QRZDatabase')
         if not raw:
             raise QRZerror('Unexpected API Result')
@@ -70,4 +85,5 @@ class QRZ(object):
             ham = raw.get('Callsign')
             if ham:
                 return ham
+
         raise Exception("Unhandled Error during Query")

@@ -1,5 +1,5 @@
-import os
-import sys
+#!/usr/bin/env python
+import os, sys
 import unittest
 
 sys.path.insert(0, os.path.abspath('..'))
@@ -44,3 +44,6 @@ class Test_QRZ(unittest.TestCase):
         # noinspection PyUnusedLocal
         with self.assertRaises(CallsignNotFound) as context:
             qrz.callsign("w7atcw7atc")
+
+if __name__ == '__main__':
+    unittest.main()

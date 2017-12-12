@@ -1,13 +1,40 @@
-# C extensions
-# Packages
-*.egg-info
-# Installer logs
-# Unit test / coverage reports
-.tox
-# Translations
-# Mr Developer
 # Local Settings File
 settings.cfg
 
 # Local XML Cache
 .idea/
+
+*.pyc
+__pycache__/*
+*.pyd
+*.egg-info
+build/
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app

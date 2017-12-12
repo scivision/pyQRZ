@@ -1,7 +1,6 @@
 from setuptools import setup, find_packages
 
-readme = open('README.rst', 'rt').read()
-
+install_requires = ['requests', 'xmltodict', 'six']
 versionstr = '0.1.0'
 
 setup(
@@ -13,9 +12,8 @@ setup(
     url='http://github.com/zebpalmer/pyQRZ',
     license='MIT',
     description='Query QRZ.com Ham Radio License API',
-    long_description=readme,
-    install_requires=['requests', 'xmltodict', 'six'],
-    use_2to3=True,
+    long_description=open('README.rst', 'rt').read(),
+    install_requires=install_requires,
     packages=find_packages(),
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -29,7 +27,6 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3 :: Only',
         'Topic :: Communications :: Ham Radio',
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules'],

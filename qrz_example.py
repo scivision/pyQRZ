@@ -1,6 +1,8 @@
-from __future__ import print_function
-from __future__ import print_function
-from __future__ import print_function
+#!/usr/bin/env python
+"""
+Note: QRZ paid subscription is required, currently $29.95/year
+https://www.qrz.com/page/current_spec.html
+"""
 from qrz import QRZ
 
 
@@ -25,4 +27,4 @@ if __name__ == '__main__':
     # Show all the data available from QRZ.com
     print('-' * 50)
     for dict_key, dict_value in sorted(result.items()):
-        print(u'{0}: {1}'.format(dict_key, dict_value))
+        print(u'{}: {}'.format(dict_key, dict_value))
